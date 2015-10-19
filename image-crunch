@@ -1,0 +1,47 @@
+#!/bin/bash
+# Process *.jpg images recursively
+#
+# Uses Imagemagick
+#
+# Instructions:
+# * Add this file in your Bash path
+# * Make it executable (`sudo chmod +x /usr/local/bin/image-crunch`)
+# * In your terminal, move into the images directory
+# * Enter `image-crunch`
+# * Select a width
+# * Select a name for the new directory
+# The script copies all files and subdirectories into the newly specified subdirectory.
+# It then applies an imagemagick command to all files in this directory.
+# TODO: User specified image quality
+
+# Get user inputs
+echo -e "Please enter the required image width:"
+read  image_width
+read -e -p "Enter Directory: " -i "processed-images" PROCDIR
+
+# Make the new subdirectory
+mkdir $PROCDIR
+
+if [ $? != "0" ]; then  # Note: "0" is the return from successful completion of the previous operation in BASH.
+ echo "Directory creation failed"
+ exit 1
+else
+
+  echo "Directory created"
+
+fi
+
+# rsync options
+roptions=(
+-r
+--verbose
+--exclude=${PROCDIR}
+)
+
+# Copy files using rsync
+rsync "${roptions[@]}" $PWD/ /$PWD/$PROCDIR
+
+cd /$PWD/$PROCDIR
+
+# Imagemagick command on all files, recursive
+find ./ -name "*.jpg" -exec mogrify -resize $image_width -density 72 {} \;
