@@ -15,8 +15,18 @@
 # TODO: User specified image quality
 
 # Get user inputs
+# ------------------------------------------------------------------------------
+# Width
 echo -e "Please enter the required image width:"
 read  image_width
+# Compression
+read -r -p "Do you want to compress images? [y/N] " response
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+    compression=true
+else
+    compression=false
+fi
 read -e -p "Enter Directory: " -i "processed-images" PROCDIR
 
 # Make the new subdirectory
@@ -43,5 +53,11 @@ rsync "${roptions[@]}" $PWD/ /$PWD/$PROCDIR
 
 cd /$PWD/$PROCDIR
 
-# Imagemagick command on all files, recursive
-find ./ -name "*.jpg" -exec mogrify -resize $image_width -density 72 {} \;
+if [ true == $compression ]
+then
+  # Imagemagick command on all files, recursive, with compression
+  find ./ -name "*.jpg" -exec mogrify -resize $image_width -density 72 -quality "70%" {} \;
+else
+  # Imagemagick command on all files, recursive, No compression
+  find ./ -name "*.jpg" -exec mogrify -resize $image_width -density 72 {} \;
+fi

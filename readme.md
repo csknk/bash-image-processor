@@ -15,8 +15,20 @@ Uses [Imagemagick](http://www.imagemagick.org/script/index.php).
 * In your terminal, move into the images directory
 * Enter `image-crunch`
 * Select a width when prompted
+* Select compression or not
 * Select a name for the new directory
 
 The script copies all files and subdirectories into the newly specified subdirectory.
 
-It then applies an Imagemagick command to all files in this directory.
+It then applies an Imagemagick command to all files in this directory:
+
+~~~
+if [ true == $compression ]
+then
+  # Imagemagick command on all files, recursive, with compression
+  find ./ -name "*.jpg" -exec mogrify -resize $image_width -density 72 -quality "70%" {} \;
+else
+  # Imagemagick command on all files, recursive, No compression
+  find ./ -name "*.jpg" -exec mogrify -resize $image_width -density 72 {} \;
+fi
+~~~
