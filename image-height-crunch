@@ -17,15 +17,15 @@
 # Get user inputs
 # ------------------------------------------------------------------------------
 # Width
-echo -e "Please enter the required image width:"
-read  image_width
-# Compression
+echo -e "Please enter the required image height:"
+read  IMAGE_HEIGHT
+# COMPRESSION
 read -r -p "Do you want to compress images? [y/N] " response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-    compression=true
+    COMPRESSION=true
 else
-    compression=false
+    COMPRESSION=false
 fi
 read -e -p "Enter Directory: " -i "processed-images" PROCDIR
 
@@ -53,11 +53,11 @@ rsync "${roptions[@]}" $PWD/ /$PWD/$PROCDIR
 
 cd $PWD/$PROCDIR
 
-if [ true == $compression ]
+if [ true == $COMPRESSION ]
 then
-  # Imagemagick command on all files, recursive, with compression
-  find ./ \( -name "*.jpg" -o -name "*.JPG" \) -exec mogrify -resize $image_width -density 72 -quality "70%" {} \;
+  # Imagemagick command on all files, recursive, with COMPRESSION
+  find ./ \( -name "*.jpg" -o -name "*.JPG" \) -exec mogrify -geometry x$IMAGE_HEIGHT -density 72 -quality "70%" {} \;
 else
-  # Imagemagick command on all files, recursive, No compression
-  find ./ \( -name "*.jpg" -o -name "*.JPG" \) -exec mogrify -resize $image_width -density 72 {} \;
+  # Imagemagick command on all files, recursive, No COMPRESSION
+  find ./ \( -name "*.jpg" -o -name "*.JPG" \) -exec mogrify -geometry x$IMAGE_HEIGHT -density 72 {} \;
 fi
