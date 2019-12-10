@@ -8,7 +8,8 @@ Builds a target directory containing processed files, with the same directory st
 
 Uses [Imagemagick](http://www.imagemagick.org/script/index.php).
 
-##Instructions
+Instructions
+------------
 
 * Add this file to a directory in your shell(Bash) path
 * Make it executable (`sudo chmod +x /usr/local/bin/image-crunch`)
@@ -22,7 +23,7 @@ The script copies all files and subdirectories into the newly specified subdirec
 
 It then applies an Imagemagick command to all files in this directory:
 
-~~~
+```bash
 if [ true == $compression ]
 then
   # Imagemagick command on all files, recursive, with compression
@@ -31,4 +32,4 @@ else
   # Imagemagick command on all files, recursive, No compression
   find ./ -name "*.jpg" -exec mogrify -resize $image_width -density 72 {} \;
 fi
-~~~
+```
